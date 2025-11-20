@@ -1,37 +1,25 @@
-name: Super-Linter
+name: Lint Code Base
 
 on:
   push:
-    branches: ["main"]
+    branches:
+      - main
   pull_request:
-    branches: ["main"]
-
-# Top-level permissions (required for security best practices)
-permissions:
-  contents: read
-  packages: read
-  statuses: write
+    branches:
+      - main
 
 jobs:
-  lint:
+  super-linter:
     name: Lint Code Base
     runs-on: ubuntu-latest
 
-    # Job-level permissions (Zizmor requires this)
-    permissions:
-      contents: read
-      packages: read
-      statuses: write
-
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
-        with:
-          fetch-depth: 1
-          # persist-credentials left as default for Zizmor compliance
+        uses: actions/checkout@v3
 
       - name: Run Super-Linter
-        uses: github/super-linter@v8.2.1
+        uses: github/super-linter@v9  # Use latest v9.x.x version
         env:
+          VALIDATE_ALL_CODEBASE: true
+          DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
